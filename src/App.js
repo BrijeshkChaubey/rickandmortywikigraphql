@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import Navbar from './components/Navbar/Navbar';
+import Home from './Pages/Home';
+import Episodes from './Pages/Episodes';
+import Location from './Pages/Location';
+import CardDetails from './components/Card/CardDetails';
+
+const client = new ApolloClient({
+  uri: 'https://rickandmortyapi.com/graphql',
+  cache: new InMemoryCache()
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApolloProvider client={client}>
+      <Router>
+        <div className="App">
+          <Navbar />
+        </div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/:id" element={<CardDetails />} />
+
+          <Route path="/episodes" element={<Episodes />} />
+          <Route path="/episodes/:id" element={<CardDetails />} />
+
+          <Route path="/location" element={<Location />} />
+          <Route path="/location/:id" element={<CardDetails />} />
+        </Routes>
+      </Router>
+    </ApolloProvider>
   );
 }
 
